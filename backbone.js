@@ -1,18 +1,18 @@
-//     Backbone.js 1.1.2
+//     Bacbone.js 1.1.2
 
 //     (c) 2010-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-//     Backbone may be freely distributed under the MIT license.
+//     Bacbone may be freely distributed under the MIT license.
 //     For all details and documentation:
 //     http://backbonejs.org
 
 (function(root, factory) {
 
-  // Set up Backbone appropriately for the environment. Start with AMD.
+  // Set up Bacbone appropriately for the environment. Start with AMD.
   if (typeof define === 'function' && define.amd) {
     define(['underscore', 'jquery', 'exports'], function(_, $, exports) {
       // Export global even in AMD case in case this script is loaded with
-      // others that may still expect a global Backbone.
-      root.Backbone = factory(root, exports, _, $);
+      // others that may still expect a global Bacbone.
+      root.Bacbone = factory(root, exports, _, $);
     });
 
   // Next for Node.js or CommonJS. jQuery may not be needed as a module.
@@ -22,48 +22,48 @@
 
   // Finally, as a browser global.
   } else {
-    root.Backbone = factory(root, {}, root._, (root.jQuery || root.Zepto || root.ender || root.$));
+    root.Bacbone = factory(root, {}, root._, (root.jQuery || root.Zepto || root.ender || root.$));
   }
 
-}(this, function(root, Backbone, _, $) {
+}(this, function(root, Bacbone, _, $) {
 
   // Initial Setup
   // -------------
 
-  // Save the previous value of the `Backbone` variable, so that it can be
+  // Save the previous value of the `Bacbone` variable, so that it can be
   // restored later on, if `noConflict` is used.
-  var previousBackbone = root.Backbone;
+  var previousBackbone = root.Bacbone;
 
   // Create local references to array methods we'll want to use later.
   var array = [];
   var slice = array.slice;
 
   // Current version of the library. Keep in sync with `package.json`.
-  Backbone.VERSION = '1.1.2';
+  Bacbone.VERSION = '1.1.2';
 
-  // For Backbone's purposes, jQuery, Zepto, Ender, or My Library (kidding) owns
+  // For Bacbone's purposes, jQuery, Zepto, Ender, or My Library (kidding) owns
   // the `$` variable.
-  Backbone.$ = $;
+  Bacbone.$ = $;
 
-  // Runs Backbone.js in *noConflict* mode, returning the `Backbone` variable
-  // to its previous owner. Returns a reference to this Backbone object.
-  Backbone.noConflict = function() {
-    root.Backbone = previousBackbone;
+  // Runs Bacbone.js in *noConflict* mode, returning the `Bacbone` variable
+  // to its previous owner. Returns a reference to this Bacbone object.
+  Bacbone.noConflict = function() {
+    root.Bacbone = previousBackbone;
     return this;
   };
 
   // Turn on `emulateHTTP` to support legacy HTTP servers. Setting this option
   // will fake `"PATCH"`, `"PUT"` and `"DELETE"` requests via the `_method` parameter and
   // set a `X-Http-Method-Override` header.
-  Backbone.emulateHTTP = false;
+  Bacbone.emulateHTTP = false;
 
   // Turn on `emulateJSON` to support legacy servers that can't deal with direct
   // `application/json` requests ... will encode the body as
   // `application/x-www-form-urlencoded` instead and will send the model in a
   // form param named `model`.
-  Backbone.emulateJSON = false;
+  Bacbone.emulateJSON = false;
 
-  // Backbone.Events
+  // Bacbone.Events
   // ---------------
 
   // A module that can be mixed in to *any object* in order to provide it with
@@ -72,11 +72,11 @@
   // succession.
   //
   //     var object = {};
-  //     _.extend(object, Backbone.Events);
+  //     _.extend(object, Bacbone.Events);
   //     object.on('expand', function(){ alert('expanded'); });
   //     object.trigger('expand');
   //
-  var Events = Backbone.Events = {
+  var Events = Bacbone.Events = {
 
     // Bind an event to a `callback` function. Passing `"all"` will bind
     // the callback to all events fired.
@@ -216,7 +216,7 @@
 
   // A difficult-to-believe, but optimized internal dispatch function for
   // triggering events. Tries to keep the usual cases speedy (most internal
-  // Backbone events have 3 arguments).
+  // Bacbone events have 3 arguments).
   var triggerEvents = function(events, args) {
     var ev, i = -1, l = events.length, a1 = args[0], a2 = args[1], a3 = args[2];
     switch (args.length) {
@@ -230,7 +230,7 @@
 
   var listenMethods = {listenTo: 'on', listenToOnce: 'once'};
 
-  // Proxy Underscore methods to a Backbone class' prototype using a
+  // Proxy Underscore methods to a Bacbone class' prototype using a
   // particular attribute as the data argument
   var addMethod = function(method, attribute) {
     var isString = typeof method == 'string';
@@ -280,21 +280,21 @@
   Events.bind   = Events.on;
   Events.unbind = Events.off;
 
-  // Allow the `Backbone` object to serve as a global event bus, for folks who
+  // Allow the `Bacbone` object to serve as a global event bus, for folks who
   // want global "pubsub" in a convenient place.
-  _.extend(Backbone, Events);
+  _.extend(Bacbone, Events);
 
-  // Backbone.Model
+  // Bacbone.Model
   // --------------
 
-  // Backbone **Models** are the basic data object in the framework --
+  // Bacbone **Models** are the basic data object in the framework --
   // frequently representing a row in a table in a database on your server.
   // A discrete chunk of data and a bunch of useful, related methods for
   // performing computations and transformations on that data.
 
   // Create a new model with the specified attributes. A client id (`cid`)
   // is automatically generated and assigned for you.
-  var Model = Backbone.Model = function(attributes, options) {
+  var Model = Bacbone.Model = function(attributes, options) {
     var attrs = attributes || {};
     options || (options = {});
     this.cid = _.uniqueId('c');
@@ -329,10 +329,10 @@
       return _.clone(this.attributes);
     },
 
-    // Proxy `Backbone.sync` by default -- but override this if you need
+    // Proxy `Bacbone.sync` by default -- but override this if you need
     // custom syncing semantics for *this* particular model.
     sync: function() {
-      return Backbone.sync.apply(this, arguments);
+      return Bacbone.sync.apply(this, arguments);
     },
 
     // Get the value of an attribute.
@@ -578,7 +578,7 @@
     },
 
     // Default URL for the model's representation on the server -- if you're
-    // using Backbone's restful methods, override this to change the endpoint
+    // using Bacbone's restful methods, override this to change the endpoint
     // that will be called.
     url: function() {
       var base =
@@ -627,12 +627,12 @@
   var modelMethods = ['keys', 'values', 'pairs', 'invert', ['pick'], ['omit'], 'chain', 'isEmpty'];
 
   // Mix in each Underscore method as a proxy to `Model#attributes`.
-  addUnderscoreMethods(modelMethods, 'attributes', Backbone.Model);
+  addUnderscoreMethods(modelMethods, 'attributes', Bacbone.Model);
 
-  // Backbone.Collection
+  // Bacbone.Collection
   // -------------------
 
-  // If models tend to represent a single row of data, a Backbone Collection is
+  // If models tend to represent a single row of data, a Bacbone Collection is
   // more analogous to a table full of data ... or a small slice or page of that
   // table, or a collection of rows that belong together for a particular reason
   // -- all of the messages in this particular folder, all of the documents
@@ -642,7 +642,7 @@
   // Create a new **Collection**, perhaps to contain a specific type of `model`.
   // If a `comparator` is specified, the Collection will maintain
   // its models in sort order, as they're added and removed.
-  var Collection = Backbone.Collection = function(models, options) {
+  var Collection = Bacbone.Collection = function(models, options) {
     options || (options = {});
     if (options.model) this.model = options.model;
     if (options.comparator !== void 0) this.comparator = options.comparator;
@@ -658,7 +658,7 @@
   // Define the Collection's inheritable methods.
   _.extend(Collection.prototype, Events, {
 
-    // The default model for a collection is just a **Backbone.Model**.
+    // The default model for a collection is just a **Bacbone.Model**.
     // This should be overridden in most cases.
     model: Model,
 
@@ -672,9 +672,9 @@
       return this.map(function(model){ return model.toJSON(options); });
     },
 
-    // Proxy `Backbone.sync` by default.
+    // Proxy `Bacbone.sync` by default.
     sync: function() {
-      return Backbone.sync.apply(this, arguments);
+      return Bacbone.sync.apply(this, arguments);
     },
 
     // Add a model, or list of models to the set.
@@ -1014,7 +1014,7 @@
   });
 
   // Underscore methods that we want to implement on the Collection.
-  // 90% of the core usefulness of Backbone Collections is actually implemented
+  // 90% of the core usefulness of Bacbone Collections is actually implemented
   // right here:
   var collectionMethods = ['forEach', 'each', 'map', 'collect', 'reduce', 'foldl',
     'inject', 'reduceRight', 'foldr', 'find', 'detect', 'filter', 'select',
@@ -1024,7 +1024,7 @@
     'lastIndexOf', 'isEmpty', 'chain', 'sample', 'partition'];
 
   // Mix in each Underscore method as a proxy to `Collection#models`.
-  addUnderscoreMethods(collectionMethods, 'models', Backbone.Collection);
+  addUnderscoreMethods(collectionMethods, 'models', Bacbone.Collection);
 
   // Underscore methods that take a property name as an argument.
   var attributeMethods = ['groupBy', 'countBy', 'sortBy', 'indexBy'];
@@ -1040,10 +1040,10 @@
     };
   });
 
-  // Backbone.View
+  // Bacbone.View
   // -------------
 
-  // Backbone Views are almost more convention than they are actual code. A View
+  // Bacbone Views are almost more convention than they are actual code. A View
   // is simply a JavaScript object that represents a logical chunk of UI in the
   // DOM. This might be a single item, an entire list, a sidebar or panel, or
   // even the surrounding frame which wraps your whole app. Defining a chunk of
@@ -1051,9 +1051,9 @@
   // having to worry about render order ... and makes it easy for the view to
   // react to specific changes in the state of your models.
 
-  // Creating a Backbone.View creates its initial element outside of the DOM,
+  // Creating a Bacbone.View creates its initial element outside of the DOM,
   // if an existing element is not provided...
-  var View = Backbone.View = function(options) {
+  var View = Bacbone.View = function(options) {
     this.cid = _.uniqueId('view');
     options || (options = {});
     _.extend(this, _.pick(options, viewOptions));
@@ -1067,7 +1067,7 @@
   // List of view options to be merged as properties.
   var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
 
-  // Set up all inheritable **Backbone.View** properties and methods.
+  // Set up all inheritable **Bacbone.View** properties and methods.
   _.extend(View.prototype, Events, {
 
     // The default `tagName` of a View's element is `"div"`.
@@ -1091,7 +1091,7 @@
     },
 
     // Remove this view by taking the element out of the DOM, and removing any
-    // applicable Backbone.Events listeners.
+    // applicable Bacbone.Events listeners.
     remove: function() {
       this._removeElement();
       this.stopListening();
@@ -1120,7 +1120,7 @@
     // alternative DOM manipulation API and are only required to set the
     // `this.el` property.
     _setElement: function(el) {
-      this.$el = el instanceof Backbone.$ ? el : Backbone.$(el);
+      this.$el = el instanceof Bacbone.$ ? el : Bacbone.$(el);
       this.el = this.$el[0];
     },
 
@@ -1159,7 +1159,7 @@
 
     // Clears all callbacks previously bound to the view by `delegateEvents`.
     // You usually don't need to use this, but may wish to if you have multiple
-    // Backbone views attached to the same DOM element.
+    // Bacbone views attached to the same DOM element.
     undelegateEvents: function() {
       if (this.$el) this.$el.off('.delegateEvents' + this.cid);
       return this;
@@ -1201,10 +1201,10 @@
 
   });
 
-  // Backbone.sync
+  // Bacbone.sync
   // -------------
 
-  // Override this function to change the manner in which Backbone persists
+  // Override this function to change the manner in which Bacbone persists
   // models to the server. You will be passed the type of request, and the
   // model in question. By default, makes a RESTful Ajax request
   // to the model's `url()`. Some possible customizations could be:
@@ -1213,19 +1213,19 @@
   // * Send up the models as XML instead of JSON.
   // * Persist models via WebSockets instead of Ajax.
   //
-  // Turn on `Backbone.emulateHTTP` in order to send `PUT` and `DELETE` requests
+  // Turn on `Bacbone.emulateHTTP` in order to send `PUT` and `DELETE` requests
   // as `POST`, with a `_method` parameter containing the true HTTP method,
   // as well as all requests with the body as `application/x-www-form-urlencoded`
   // instead of `application/json` with the model in a param named `model`.
   // Useful when interfacing with server-side languages like **PHP** that make
   // it difficult to read the body of `PUT` requests.
-  Backbone.sync = function(method, model, options) {
+  Bacbone.sync = function(method, model, options) {
     var type = methodMap[method];
 
     // Default options, unless specified.
     _.defaults(options || (options = {}), {
-      emulateHTTP: Backbone.emulateHTTP,
-      emulateJSON: Backbone.emulateJSON
+      emulateHTTP: Bacbone.emulateHTTP,
+      emulateJSON: Bacbone.emulateJSON
     });
 
     // Default JSON-request options.
@@ -1274,12 +1274,12 @@
     };
 
     // Make the request, allowing the user to override any Ajax options.
-    var xhr = options.xhr = Backbone.ajax(_.extend(params, options));
+    var xhr = options.xhr = Bacbone.ajax(_.extend(params, options));
     model.trigger('request', model, xhr, options);
     return xhr;
   };
 
-  // Map from CRUD to HTTP for our default `Backbone.sync` implementation.
+  // Map from CRUD to HTTP for our default `Bacbone.sync` implementation.
   var methodMap = {
     'create': 'POST',
     'update': 'PUT',
@@ -1288,18 +1288,18 @@
     'read':   'GET'
   };
 
-  // Set the default implementation of `Backbone.ajax` to proxy through to `$`.
+  // Set the default implementation of `Bacbone.ajax` to proxy through to `$`.
   // Override this if you'd like to use a different library.
-  Backbone.ajax = function() {
-    return Backbone.$.ajax.apply(Backbone.$, arguments);
+  Bacbone.ajax = function() {
+    return Bacbone.$.ajax.apply(Bacbone.$, arguments);
   };
 
-  // Backbone.Router
+  // Bacbone.Router
   // ---------------
 
   // Routers map faux-URLs to actions, and fire events when routes are
   // matched. Creating a new one sets its `routes` hash, if not set statically.
-  var Router = Backbone.Router = function(options) {
+  var Router = Bacbone.Router = function(options) {
     options || (options = {});
     if (options.routes) this.routes = options.routes;
     this._bindRoutes();
@@ -1313,7 +1313,7 @@
   var splatParam    = /\*\w+/g;
   var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
 
-  // Set up all inheritable **Backbone.Router** properties and methods.
+  // Set up all inheritable **Bacbone.Router** properties and methods.
   _.extend(Router.prototype, Events, {
 
     // Initialize is an empty function by default. Override it with your own
@@ -1334,12 +1334,12 @@
       }
       if (!callback) callback = this[name];
       var router = this;
-      Backbone.history.route(route, function(fragment) {
+      Bacbone.history.route(route, function(fragment) {
         var args = router._extractParameters(route, fragment);
         if (router.execute(callback, args, name) !== false) {
           router.trigger.apply(router, ['route:' + name].concat(args));
           router.trigger('route', name, args);
-          Backbone.history.trigger('route', router, name, args);
+          Bacbone.history.trigger('route', router, name, args);
         }
       });
       return this;
@@ -1351,13 +1351,13 @@
       if (callback) callback.apply(this, args);
     },
 
-    // Simple proxy to `Backbone.history` to save a fragment into the history.
+    // Simple proxy to `Bacbone.history` to save a fragment into the history.
     navigate: function(fragment, options) {
-      Backbone.history.navigate(fragment, options);
+      Bacbone.history.navigate(fragment, options);
       return this;
     },
 
-    // Bind all defined routes to `Backbone.history`. We have to reverse the
+    // Bind all defined routes to `Bacbone.history`. We have to reverse the
     // order of the routes here to support behavior where the most general
     // routes can be defined at the bottom of the route map.
     _bindRoutes: function() {
@@ -1395,7 +1395,7 @@
 
   });
 
-  // Backbone.History
+  // Bacbone.History
   // ----------------
 
   // Handles cross-browser history management, based on either
@@ -1403,7 +1403,7 @@
   // [onhashchange](https://developer.mozilla.org/en-US/docs/DOM/window.onhashchange)
   // and URL fragments. If the browser supports neither (old IE, natch),
   // falls back to polling.
-  var History = Backbone.History = function() {
+  var History = Bacbone.History = function() {
     this.handlers = [];
     _.bindAll(this, 'checkUrl');
 
@@ -1426,7 +1426,7 @@
   // Has the history handling already been started?
   History.started = false;
 
-  // Set up all inheritable **Backbone.History** properties and methods.
+  // Set up all inheritable **Bacbone.History** properties and methods.
   _.extend(History.prototype, Events, {
 
     // The default interval to poll for hash changes, if necessary, is
@@ -1476,7 +1476,7 @@
     // Start the hash change handling, returning `true` if the current URL matches
     // an existing route, and `false` otherwise.
     start: function(options) {
-      if (History.started) throw new Error('Backbone.history has already been started');
+      if (History.started) throw new Error('Bacbone.history has already been started');
       History.started = true;
 
       // Figure out the initial configuration. Do we need an iframe?
@@ -1543,7 +1543,7 @@
       if (!this.options.silent) return this.loadUrl();
     },
 
-    // Disable Backbone.history, perhaps temporarily. Not useful in a real app,
+    // Disable Bacbone.history, perhaps temporarily. Not useful in a real app,
     // but possibly useful for unit testing Routers.
     stop: function() {
       // Add a cross-platform `removeEventListener` shim for older browsers.
@@ -1660,8 +1660,8 @@
 
   });
 
-  // Create the default Backbone.history.
-  Backbone.history = new History;
+  // Create the default Bacbone.history.
+  Bacbone.history = new History;
 
   // Helpers
   // -------
@@ -1719,6 +1719,6 @@
     };
   };
 
-  return Backbone;
+  return Bacbone;
 
 }));
