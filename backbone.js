@@ -230,6 +230,38 @@
 
   var listenMethods = {listenTo: 'on', listenToOnce: 'once'};
 
+  // Proxy Underscore methods to a Backbone class' prototype using a
+  // particular attribute as the data argument
+  var addMethod = function(method, attribute) {
+    var isString = typeof method == 'string';
+    var arity = isString && _[method].length;
+    method = isString ? method : method[0];
+    switch (arity) {
+      case 1: return function() {
+        return _[method](this[attribute]);
+      }
+      case 2: return function(value) {
+        return _[method](this[attribute], value);
+      }
+      case 3: return function(iteratee, context) {
+        return _[method](this[attribute], iteratee, context);
+      }
+      case 4: return function(iteratee, defaultVal, context) {
+        return _[method](this[attribute], iteratee, defaultVal, context);
+      }
+      default: return function() {
+        var args = slice.call(arguments);
+        args.unshift(this[attribute]);
+        return _[method].apply(_, args);
+      };
+    }
+  };
+  var addUnderscoreMethods = function(methods, attribute, Class) {
+    _.each(methods, function(method) {
+      if (_[method]) Class.prototype[method] = addMethod(method, attribute);
+    });
+  };
+
   // Inversion-of-control versions of `on` and `once`. Tell *this* object to
   // listen to an event in another object ... keeping track of what it's
   // listening to.
@@ -592,17 +624,10 @@
   });
 
   // Underscore methods that we want to implement on the Model.
-  var modelMethods = ['keys', 'values', 'pairs', 'invert', 'pick', 'omit', 'chain', 'isEmpty'];
+  var modelMethods = ['keys', 'values', 'pairs', 'invert', ['pick'], ['omit'], 'chain', 'isEmpty'];
 
   // Mix in each Underscore method as a proxy to `Model#attributes`.
-  _.each(modelMethods, function(method) {
-    if (!_[method]) return;
-    Model.prototype[method] = function() {
-      var args = slice.call(arguments);
-      args.unshift(this.attributes);
-      return _[method].apply(_, args);
-    };
-  });
+  addUnderscoreMethods(modelMethods, 'attributes', Backbone.Model);
 
   // Backbone.Collection
   // -------------------
@@ -991,22 +1016,15 @@
   // Underscore methods that we want to implement on the Collection.
   // 90% of the core usefulness of Backbone Collections is actually implemented
   // right here:
-  var methods = ['forEach', 'each', 'map', 'collect', 'reduce', 'foldl',
+  var collectionMethods = ['forEach', 'each', 'map', 'collect', 'reduce', 'foldl',
     'inject', 'reduceRight', 'foldr', 'find', 'detect', 'filter', 'select',
     'reject', 'every', 'all', 'some', 'any', 'include', 'contains', 'invoke',
     'max', 'min', 'toArray', 'size', 'first', 'head', 'take', 'initial', 'rest',
-    'tail', 'drop', 'last', 'without', 'difference', 'indexOf', 'shuffle',
+    'tail', 'drop', 'last', ['without'], ['difference'], 'indexOf', 'shuffle',
     'lastIndexOf', 'isEmpty', 'chain', 'sample', 'partition'];
 
   // Mix in each Underscore method as a proxy to `Collection#models`.
-  _.each(methods, function(method) {
-    if (!_[method]) return;
-    Collection.prototype[method] = function() {
-      var args = slice.call(arguments);
-      args.unshift(this.models);
-      return _[method].apply(_, args);
-    };
-  });
+  addUnderscoreMethods(collectionMethods, 'models', Backbone.Collection);
 
   // Underscore methods that take a property name as an argument.
   var attributeMethods = ['groupBy', 'countBy', 'sortBy', 'indexBy'];
