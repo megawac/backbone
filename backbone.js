@@ -240,11 +240,10 @@
       listeningTo[id] = obj;
       if (!callback && typeof name === 'object') callback = this;
       if (implementation === 'once') {
-        var cachedCallback = callback;
-        callback = function () {
+        callback = _.compose(function(result) {
           this.stopListening(obj, name);
-          return cachedCallback.apply(this, arguments);
-        };
+          return result;
+        }, callback);
       }
       obj[implementation](name, callback, this);
       return this;
