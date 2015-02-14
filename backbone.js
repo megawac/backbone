@@ -271,20 +271,23 @@
     }, {}, name, callback, offer);
   };
 
+  function rest(args) {
+    var length = args.length ? args.length - 1 : 0;
+    var result = Array(length);
+    for (var i = 0; i < length; i++) result[i] = args[i + 1];
+    return result;
+  }
+
   // Trigger one or many events, firing all bound callbacks. Callbacks are
   // passed the same arguments as `trigger` is, apart from the event name
   // (unless you're listening on `"all"`, which will cause your callback to
   // receive the true name of the event as the first argument).
   Events.trigger =  function(name) {
     if (!this._events) return this;
-    
-    var length = Math.max(0, arguments.length - 1);
-    var args = Array(length);
-    for (var i = 0; i < length; i++) args[i] = arguments[i + 1];
 
     // Pass `triggerSentinel` as "callback" param. If `name` is an object,
     // it `triggerApi` will be passed the property's value instead.
-    eventsApi(triggerApi, this, name, triggerSentinel, args);
+    eventsApi(triggerApi, this, name, triggerSentinel, rest(arguments));
     return this;
   };
 
