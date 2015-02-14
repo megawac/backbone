@@ -271,13 +271,6 @@
     }, {}, name, callback, offer);
   };
 
-  function rest(args) {
-    var length = args.length ? args.length - 1 : 0;
-    var result = Array(length);
-    for (var i = 0; i < length; i++) result[i] = args[i + 1];
-    return result;
-  }
-
   // Trigger one or many events, firing all bound callbacks. Callbacks are
   // passed the same arguments as `trigger` is, apart from the event name
   // (unless you're listening on `"all"`, which will cause your callback to
@@ -287,7 +280,7 @@
 
     // Pass `triggerSentinel` as "callback" param. If `name` is an object,
     // it `triggerApi` will be passed the property's value instead.
-    eventsApi(triggerApi, this, name, triggerSentinel, rest(arguments));
+    eventsApi(triggerApi, this, name, triggerSentinel, _.rest(arguments));
     return this;
   };
 
