@@ -6,6 +6,7 @@
 //     http://backbonejs.org
 
 (function(root, factory) {
+  var $ = root.jQuery || root.Zepto || root.ender || root.$;
 
   // Set up Backbone appropriately for the environment. Start with AMD.
   if (typeof define === 'function' && define.amd) {
@@ -18,11 +19,14 @@
   // Next for Node.js or CommonJS. jQuery may not be needed as a module.
   } else if (typeof exports !== 'undefined') {
     var _ = require('underscore');
-    factory(root, exports, _);
+    try {
+      $ = require('jquery');
+    } catch (no$) {}
+    factory(root, exports, _, $);
 
   // Finally, as a browser global.
   } else {
-    root.Backbone = factory(root, {}, root._, (root.jQuery || root.Zepto || root.ender || root.$));
+    root.Backbone = factory(root, {}, root._, $);
   }
 
 }(this, function(root, Backbone, _, $) {
