@@ -275,16 +275,11 @@
   // passed the same arguments as `trigger` is, apart from the event name
   // (unless you're listening on `"all"`, which will cause your callback to
   // receive the true name of the event as the first argument).
-  Events.trigger =  function(name) {
+  Events.trigger =  _.restParams(function(name, args) {
     if (!this._events) return this;
-    
-    var length = Math.max(0, arguments.length - 1);
-    var args = Array(length);
-    for (var i = 0; i < length; i++) args[i] = arguments[i + 1];
-
     eventsApi(triggerApi, this, name, void 0, args);
     return this;
-  };
+  });
 
   // Handles triggering the appropriate event callbacks.
   var triggerApi = function(obj, name, cb, args) {
